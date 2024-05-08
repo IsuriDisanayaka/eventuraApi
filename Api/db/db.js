@@ -9,11 +9,9 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-
     console.log("DB connected");
   } catch (err) {
     console.log(`DB_URL: ${process.env.DB_URL}`);
-
     console.error("DB connection error", err);
   }
 };
