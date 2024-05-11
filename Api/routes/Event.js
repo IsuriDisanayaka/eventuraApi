@@ -25,7 +25,21 @@ router.post("/event/save", async (req, res) => {
 
 router.get("/events", async (req, res) => {
   try {
-    const events = await Event.find({ isDeleted: { $ne: true } });
+    const userEmail = req.query.email;
+
+    if (!userEmail) {
+      return res.status(400).json({ error: "User email is required" });
+    }
+
+    const events = await Event.find({
+      email: userEmail,
+      isDeleted: { $ne: true },
+    });
+
+    if (!events.length) {
+      return res.status(404).json({ error: "No events found for this user" });
+    }
+
     return res.status(200).json(events);
   } catch (err) {
     console.error(err);
@@ -83,18 +97,14 @@ router.put("/event/:eventId", async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    const event = await Event.findOne({ eventId: req.params.eventId });
+    const event = await Event.findOneAndUpdate(
+      { eventId: req.params.eventId },
+      req.body,
+      { new: true }
+    );
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
     }
-    if (event.isDeleted === true) {
-      return res.status(404).json({ error: "Event not found" });
-    }
-    event.set(req.body);
-    if (req.body.isDeleted === true) {
-      event.isDeleted = true;
-    }
-    await event.save();
     return res.status(200).json({
       success: "Event updated successfully",
     });

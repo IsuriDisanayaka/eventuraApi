@@ -18,6 +18,10 @@ const eventSchema = new mongoose.Schema({
   end: {
     type: Date,
   },
+  email: {
+    type: String,
+    required: true,
+  },
   isDeleted: {
     type: Boolean,
     default: false,
@@ -30,6 +34,7 @@ const eventValidationSchema = Joi.object({
   description: Joi.string().required(),
   start: Joi.date().required(),
   end: Joi.date().required(),
+  email: Joi.string().email().required(),
 });
 
 module.exports = {
