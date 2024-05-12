@@ -26,6 +26,10 @@ const eventSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  reminderSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Event = mongoose.model("  Event", eventSchema);

@@ -93,9 +93,13 @@ router.put("/event/:eventId", async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
+    const updates = {
+      ...req.body,
+      reminderSent: false,
+    };
     const event = await Event.findOneAndUpdate(
       { eventId: req.params.eventId },
-      req.body,
+      updates,
       { new: true }
     );
     if (!event) {
