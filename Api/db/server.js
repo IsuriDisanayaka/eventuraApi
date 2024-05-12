@@ -5,6 +5,7 @@ const express = require("express");
 const connectDB = require("./db");
 const eventRoutes = require("../routes/Event");
 const userRoutes = require("../routes/User");
+require("../mailer/scheduler");
 
 const PORT = process.env.PORT;
 const app = express();
