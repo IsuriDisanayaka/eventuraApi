@@ -65,29 +65,25 @@ router.delete("/event/:eventId", async (req, res) => {
 });
 
 router.get("/events/find", async (req, res) => {
+  const { name } = req.query;
+  if (!name) {
+    return res
+      .status(400)
+      .json({ error: "Event name is required for search." });
+  }
+
   try {
-    const searchQuery = {};
-    const queryParameters = ["name", "description", "start", "end"];
-
-    queryParameters.forEach((param) => {
-      if (req.query[param]) {
-        searchQuery[param] = req.query[param];
-      }
+    const events = await Event.find({
+      name: new RegExp(name, "i"),
+      isDeleted: { $ne: true },
     });
-    if (req.query.isDeleted && req.query.isDeleted === "true") {
-      searchQuery.isDeleted = true;
-    } else {
-      searchQuery.isDeleted = { $ne: true };
+    if (!events.length) {
+      return res.status(404).json({ error: "No matching events found." });
     }
-    const events = await Event.find(searchQuery);
-
-    if (events.length === 0) {
-      return res.status(404).json({ error: "No events found" });
-    }
-    res.json(events);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    return res.status(200).json(events);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
