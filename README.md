@@ -42,7 +42,7 @@ EventuraApi is the backend service for Eventura, an event-tracking application. 
    EMAIL_PASS=your_email_password
      ```
 
-6. **Start the development server**:
+5. **Start the development server**:
    ```bash
    npm install -g nodemon
    nodemon server.js
