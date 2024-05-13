@@ -1,17 +1,20 @@
-require("dotenv").config();
 const nodemailer = require("nodemailer");
+const functions = require("firebase-functions");
+
+const emailUser = functions.config().eventura.email_user;
+const emailPassword = functions.config().eventura.email_password;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: emailUser,
+    pass: emailPassword,
   },
 });
 
 function sendEmail(to, subject, text) {
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: emailUser,
     to: to,
     subject: subject,
     text: text,
