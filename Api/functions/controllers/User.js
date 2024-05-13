@@ -1,4 +1,3 @@
-// Assuming this is in your userController.js
 const User = require("../models/User");
 
 exports.handleGoogleLogin = async (req, res) => {
